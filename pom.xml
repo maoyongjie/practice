@@ -9,7 +9,8 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>practice-springboot</module>
+        <module>practice_springboot</module>
+        <module>practice_datastructure</module>
     </modules>
 
 
