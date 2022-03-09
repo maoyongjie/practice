@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="practice_datastruct" />
+        <module name="practice_datastructure" />
+        <module name="practice_elasticsearch" />
+        <module name="practice_flink" />
         <module name="practice_springboot" />
       </profile>
     </annotationProcessing>

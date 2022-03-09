@@ -11,7 +11,10 @@
     <modules>
         <module>practice_springboot</module>
         <module>practice_datastructure</module>
+        <module>practice_elasticsearch</module>
+        <module>practice_flink</module>
     </modules>
+
 
 
 </project>
