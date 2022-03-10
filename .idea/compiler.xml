@@ -2,13 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="practice_flink" />
-        <module name="practice_elasticsearch" />
         <module name="practice_datastructure" />
+        <module name="practice_elasticsearch" />
+        <module name="practice_flink" />
         <module name="practice_springboot" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="practice_datastructure" options="-parameters" />
+      <module name="practice_elasticsearch" options="-parameters" />
+      <module name="practice_flink" options="-parameters" />
       <module name="practice_springboot" options="-parameters" />
     </option>
   </component>

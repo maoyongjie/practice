@@ -35,4 +35,14 @@ public class SearchTest {
         }
     }
 
+    @Test
+    public void test_02(){
+        String str = "";
+        for (int i = 0; i < 3; i++) {
+            str+=i+",";
+        }
+        String[] split = str.split(",");
+        System.out.println(split.length);
+    }
+
 }
