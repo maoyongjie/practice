@@ -6,4 +6,5 @@ package com.practice.flink;
  * @Description:
  */
 public class StreamingJob {
+
 }

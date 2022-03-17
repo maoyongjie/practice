@@ -1,0 +1,15 @@
+###  结构配置数据落库相关接口：index_viidplus_datastructureconfig
+GET {{es}}/index_viidplus_dispositions/_search
+content-type:application/json
+
+{
+  "query": {
+    "match_all": {
+
+    }
+  },
+  "size": 10,
+  "_source": ["DispositionID","Title"]
+}
+
+###
