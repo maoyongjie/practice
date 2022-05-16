@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>VIIDTool</title>
+    <style>
+        textarea {
+            background-color: #bce8f1;
+            width: 100%;
+            height: 600px;
+            resize: vertical;
+            border: 1px solid #CCC;
+            /*border-radius:8px;*/
+            padding: 4px;
+            box-shadow: 2px 2px 5px #d3d6da;
+            -moz-box-shadow: 2px 2px 5px #d3d6da;
+            font-family: Consolas;
+        }
+
+        button {
+            background-color: #f9fafc;
+            font-size: 20px;
+            height: 30px;
+            width: 150px;
+        }
+    </style>
+</head>
+<body style="background-color: mintcream">
+<!--表格-->
+<!--html换行符&#10;或&#13;-->
+<div>
+    <div class="title-box" align="center">
+        <h1 id="title-text">字段信息转换</h1>
+    </div>
+    <!--输入输出框-->
+    <table width="90%" cellspacing="0px" cellpadding="0px" align="center">
+        <tr>
+            <!--输入框-->
+            <th width="20%">
+                <div style="font-size:30px">字段信息</div>
+                <textarea id="ta_input" placeholder="序号\t名称\t字段\t类型"></textarea>
+            </th>
+            <!--按钮-->
+            <th width="10%">
+                <div align="center">
+                    <button onclick="action('Mapping')">Mapping</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('FlinkSQL_CUD')">FlinkSQL_CUD</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('JsonSchema_C')">JsonSchema_C</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('Iceberg_C')">Iceberg_C</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('Fields_mapping')">Fields_mapping</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('TestData')">TestData</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('BeanFields')">BeanFields</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('EsToJavaBean')">EsToJavaBean</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('JsonData')">JsonData</button>
+                </div>
+                <br/>
+                <div align="center">
+                    <button onclick="action('EnumGenerate')">EnumGenerate</button>
+                </div>
+                <br/>
+            </th>
+            <!--输出框-->
+            <th width="20%">
+                <div style="font-size:30px">输出</div>
+                <textarea id="ta_output"></textarea>
+            </th>
+        </tr>
+    </table>
+</div>
+
+</body>
+<!--延迟加载-->
+<script type="text/javascript">
+    document.getElementById('ta_input').value = '序号\t名称\t字段\t类型';
+    //取自视图库文档 第3部分 扩展数据类型
+    const extendDataType = {
+        //新视图库
+        "SourceFactoryType": "int",
+        "HDirectionType": "string",
+        "HdirectionType": "string",
+        //老视图库扩展
+        "Similaritydegree": "double",
+        //文档原有
+        "CaseObjectIdType": "string",
+        "BusinessObjectIdType": "string",
+        "BasicObjectIdType": "string",
+        "ImageType": "string",
+        "ImageFileFormat": "string",
+        "ImageCntObjectIdType": "string",
+        "PlaceFullAddressType": "string",
+        "DeviceIDType": "string",
+        "EscapedCriminalNumberType": "string",
+        "DetentionHouseCodeType": "string",
+        "SuspectedTerroristNumberType": "string",
+        "IDType": "string",
+        "EthicCodeType": "string",
+        "NationalityCodeType": "string",
+        "ChineseAccentCode": "String",
+        "JobCategoryType": "String",
+        "BodyType": "string",
+        "SkinColorType": "string",
+        "FaceStyleType": "string",
+        "FacialFeatureType": "string",
+        "PhysicalFeatureType": "string",
+        "BodyFeatureType": "string",
+        "ImmigrantTypeCodeType": "string",
+        "CriminalInvolvedSpecilisationCodeType": "string",
+        "BodySpeciallMarkType": "string",
+        "CrimeMethodType": "string",
+        "CrimeCharacterCodeType": "string",
+        "DetaineesSpecialIdentityType": "string",
+        "MemberTypeCodeType": "string",
+        "VictimType": "string",
+        "CorpseConditionCodeType": "string",
+        "DrivingStatusCodeType": "string",
+        "UsingPropertiesCodeType": "string",
+        "WheelPrintedPatternType": "string",
+        "PlaceType": "string",
+        "WeatherType": "string",
+        "SceneType": "string",
+        "RoadAlignmentType": "string",
+        "RoadSurfaceType": "string",
+        "RoadCoditionType": "string",
+        "RoadJunctionSectionType": "string",
+        "RoadLightingType": "string",
+        "WindDirectionType": "string",
+        "InvolvedObjType": "string",
+        "FirearmsAmmunitionType": "string",
+        "ToolTraceType": "string",
+        "EvidenceType": "string",
+        "CaseEvidenceType": "string",
+        "PlaceCodeType": "string",
+        "IPAddrType": "string",
+        "NameType": "string",
+        "UsedNameType": "string",
+        "AliasType": "string",
+        "OrgType": "string",
+        "FileNameType": "string",
+        "IdNumberType": "string",
+        "StatusType": "string",
+        "PlateNoType": "string",
+        "CaseNameType": "string",
+        "CaseAbstractType": "string",
+        "DeviceNameType": "string",
+        "CaseLinkMarkType": "string",
+        "PasswordType": "string",
+        "LongitudeType": "double",
+        "LatitudeType": "double",
+        "KeywordType": "string",
+        "ModelType": "string",
+        "VehicleModelType": "string",
+        "OrgCodeType": "string",
+        "IPV6AddrType": "string",
+        "NetPortType": "int",
+        "TollgateType": "string",
+        "VehicleClassType": "string",
+        "SpeedType": "double",
+        "VehicleLengthType": "int",
+        "VehicleWidthType": "int",
+        "VehicleHeightType": "int",
+        "DataSourceType": "string",
+        "AudioCodeFormatType": "string",
+        "VideoCodeFormatType": "string",
+        "ColorType": "string",
+        "SecretLevelType": "string",
+        "QualityGradeType": "string",
+        "HorizontalShotType": "string",
+        "VerticalShotType": "string",
+        "HairStyleType": "string",
+        "PostureType": "string",
+        "PersonStatusType": "string",
+        "HabitualActionType": "string",
+        "BehaviorType": "string",
+        "AppendageType": "string",
+        "HatStyleType": "string",
+        "GlassesStyleType": "string",
+        "BagStyleType": "string",
+        "CoatStyleType": "string",
+        "CoatLengthType": "string",
+        "PantsStyleType": "string",
+        "PantsLengthType": "string",
+        "ShoesStyleType": "string",
+        "AutoFoilColorType": "string",
+        "DentInfoType": "string",
+        "FrontThingType": "string",
+        "RearThingType": "string",
+        "ThingPropertyType": "string",
+        "IllustrationType": "string",
+        "IlluminationType": "string",
+        "FieldConditionType": "string",
+        "HumidityType": "string",
+        "DenseDegreeType": "string",
+        "InjuredDegreeType": "string",
+        "RoadTerraintype": "string",
+        "DetaineesIdentityType": "string",
+        "GenderType": "string",
+        "PlateClassType": "string",
+        "enPassportType": "string",
+        "VideoFormatType": "string",
+        "ImageFormatType": "string",
+        "VehicleBrandType": "string",
+        "DispositionRangeType": "string",
+        "InfoType": "int",
+        "ConfirmStatusType": "string",
+        "DispositionCategoryType": "string",
+        "PropertyType": "int",
+        "SubscribeDetailType": "string",
+        "TimeCorrectModeType": "string",
+        "EventType": "int",
+        "VehicleColorDepthType": "string"
+    };
+
+    /*按钮触发*/
+    function action(buttonType) {
+        /**变量定义*/
+        const inputText = document.getElementById('ta_input').value;
+        const output = document.getElementById('ta_output');
+        /**分别处理*/
+        switch (buttonType) {
+            case "Mapping":
+                const mapping = {"dynamic": false};
+                const properties = {};
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        properties[cols[2].trim()] = mappingTypeFormat(cols[3].trim());
+                    }
+                });
+                properties["VPCCreateTime"] = {"type": "date", "format": "yyyyMMddHHmmss"};
+                properties["VPCUpdateTime"] = {"type": "date", "format": "yyyyMMddHHmmss"};
+                properties["VPCExpireTime"] = {"type": "date", "format": "yyyyMMddHHmmss"};
+                properties["VPCIsDelete"] = {"type": "boolean"};
+                mapping["properties"] = properties;
+                output.value = jsonPrettyFormat({"mappings": {"_doc": mapping}});
+                break;
+
+            case "FlinkSQL_CUD":
+                //定义不同位置的字段集
+                var idField = "";
+                var createKafkaTableFields = "";
+                var createESTableFields = "";
+                var createESUpdateTableFields = "";
+                var insertCFields = "";
+                var insertUFields = "";
+                /*
+                遍历字段，组合不同位置的字段集
+                    序号,名称,字段,类型
+                    0   1   2   3
+                */
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        const field = cols[2].trim();
+                        const dataType = sqlTypeFormat(cols[3].trim());
+                        if (idField === "") idField = field;
+                        createKafkaTableFields += "  " + field + " " + dataType + ",\n";
+                        insertCFields += "  " + field + ",\n";
+                        insertUFields += "  `data`." + field + " AS " + field + ",\n";
+                    }
+                });
+                createESTableFields = createKafkaTableFields + "  VPCIsDelete BOOLEAN,\n  VPCCreateTime STRING,\n  VPCUpdateTime STRING,\n  VPCExpireTime STRING,\n  PRIMARY KEY (" + idField + ") NOT ENFORCED\n";
+                createESUpdateTableFields = createKafkaTableFields + "  VPCIncremental STRING,\n  VPCUpdateTime STRING,\n  PRIMARY KEY (" + idField + ") NOT ENFORCED\n";
+                createKafkaTableFields = createKafkaTableFields.substring(0, createKafkaTableFields.lastIndexOf(','));
+                var vpcValue = "  false AS VPCIsDelete,\n  DATE_FORMAT(LOCALTIMESTAMP, 'yyyyMMddHHmmss') AS VPCCreateTime,\n  DATE_FORMAT(LOCALTIMESTAMP, 'yyyyMMddHHmmss') AS VPCUpdateTime,\n  DATE_FORMAT(TIMESTAMPADD(MONTH, 6, LOCALTIMESTAMP), 'yyyyMMddHHmmss') AS VPCExpireTime\n";
+                insertCFields += vpcValue;
+
+
+                //language=SQL
+                var outputText =
+                    /*█████Create█████*/
+                    "-- █████DataType█████ C\n" +
+                    "CREATE TABLE █████DataType█████_C_KafkaTable\n" +
+                    "(\n" +
+                    "  █████XXXListObject█████ ROW (█████XXXObject█████ ARRAY< ROW (\n" +
+                    createKafkaTableFields +
+                    "    )>)\n" +
+                    ") WITH (\n" +
+                    "  'connector' = 'kafka',\n" +
+                    "  'topic' = '█████kafka_topic█████',\n" +
+                    "  'properties.bootstrap.servers' = '${getBusinessParam(\"flinksql.kafka.servers\")}',\n" +
+                    "  'properties.group.id' = 'flinkSqlSink',\n" +
+                    "  'scan.startup.mode' = 'group-offsets',\n" +
+                    "  'format' = 'json',\n" +
+                    "  'json.ignore-parse-errors' = 'true',\n" +
+                    "  'json.fail-on-missing-field' = 'false',\n" +
+                    "  'value.format' = 'json',\n" +
+                    "  'value.fields-include' = 'ALL'\n" +
+                    ");\n" +
+                    "\n" +
+                    "CREATE TABLE █████DataType█████_C_ESTable\n" +
+                    "(\n" +
+                    createESTableFields +
+                    ") WITH (\n" +
+                    "  'connector' = '${getBusinessParam(\"flinksql.es.connector\")}',\n" +
+                    "  'hosts' = '${getBusinessParam(\"flinksql.es.servers\")}',\n" +
+                    "  'index' = '█████es_index█████',\n" +
+                    "  'document-type' = '_doc',\n" +
+                    "  'failure-handler'='ignore'\n" +
+                    ");\n" +
+                    "\n" +
+                    "INSERT INTO █████DataType█████_C_ESTable\n" +
+                    "SELECT \n" +
+                    insertCFields +
+                    "FROM (SELECT █████XXXListObject█████.█████XXXObject█████ as dataList\n" +
+                    "      FROM █████DataType█████_C_KafkaTable\n" +
+                    "      WHERE █████XXXListObject█████ IS NOT NULL),\n" +
+                    "     UNNEST(dataList) WHERE " + idField + " IS NOT NULL;\n" +
+                    /*█████Update、Delete█████*/
+                    "-- █████DataType█████ UD\n" +
+                    "CREATE TABLE █████DataType█████_UD_KafkaTable\n" +
+                    "(\n" +
+                    "  `method` STRING,\n" +
+                    "  uri STRING,\n" +
+                    "  id STRING,\n" +
+                    "  idList ARRAY< STRING >,\n" +
+                    "  incremental STRING,\n" +
+                    "  `data` ROW (\n"
+                    + createKafkaTableFields +
+                    "\n)\n" +
+                    ") WITH (\n" +
+                    "  'connector' = 'kafka',\n" +
+                    "  'topic' = '█████kafka_topic█████.UD',\n" +
+                    "  'properties.bootstrap.servers' = '${getBusinessParam(\"flinksql.kafka.servers\")}',\n" +
+                    "  'properties.group.id' = 'flinkSqlSink',\n" +
+                    "  'scan.startup.mode' = 'group-offsets',\n" +
+                    "  'format' = 'json',\n" +
+                    "  'json.ignore-parse-errors' = 'true',\n" +
+                    "  'json.fail-on-missing-field' = 'false',\n" +
+                    "  'value.format' = 'json',\n" +
+                    "  'value.fields-include' = 'ALL'\n" +
+                    ");\n" +
+                    "\n" +
+                    "CREATE TABLE █████DataType█████_U_ESTable\n" +
+                    "(\n" +
+                    createESUpdateTableFields +
+                    ") WITH (\n" +
+                    "  'connector' = '${getBusinessParam(\"flinksql.es.connector\")}',\n" +
+                    "  'hosts' = '${getBusinessParam(\"flinksql.es.servers\")}',\n" +
+                    "  'index' = '█████es_index█████',\n" +
+                    "  'document-type' = '_doc',\n" +
+                    "  'failure-handler'='ignore',\n" +
+                    "  'sink.mode' = 'field',\n" +
+                    "  'sink.mode.field' = 'VPCIncremental'\n" +
+                    ");\n" +
+                    "\n" +
+                    "INSERT INTO █████DataType█████_U_ESTable\n" +
+                    "SELECT \n" +
+                    insertUFields +
+                    "  incremental AS VPCIncremental,\n" +
+                    "  DATE_FORMAT(LOCALTIMESTAMP, 'yyyyMMddHHmmss')  AS VPCUpdateTime\n" +
+                    "FROM █████DataType█████_UD_KafkaTable WHERE `method`='PUT' AND `data`." + idField + " IS NOT NULL;\n" +
+                    "\n" +
+                    "CREATE TABLE █████DataType█████_D_ESTable\n" +
+                    "(\n" +
+                    "  " + idField + " STRING,\n" +
+                    "  VPCUpdateTime STRING,\n" +
+                    "  VPCIsDelete BOOLEAN,\n" +
+                    "  PRIMARY KEY (" + idField + ") NOT ENFORCED\n" +
+                    ") WITH (\n" +
+                    "  'connector' = '${getBusinessParam(\"flinksql.es.connector\")}',\n" +
+                    "  'hosts' = '${getBusinessParam(\"flinksql.es.servers\")}',\n" +
+                    "  'index' = '█████es_index█████',\n" +
+                    "  'document-type' = '_doc',\n" +
+                    "  'failure-handler'='ignore',\n" +
+                    "  'sink.mode' = 'merge'\n" +
+                    ");\n" +
+                    "\n" +
+                    "INSERT INTO █████DataType█████_D_ESTable\n" +
+                    "SELECT\n" +
+                    "  t1." + idField + ",\n" +
+                    "  DATE_FORMAT(LOCALTIMESTAMP, 'yyyyMMddHHmmss')  AS VPCUpdateTime,\n" +
+                    "  true AS VPCIsDelete\n" +
+                    "FROM █████DataType█████_UD_KafkaTable ,\n" +
+                    "UNNEST(idList) as t1(" + idField + ") WHERE `method`='DELETE' AND idList IS NOT NULL;";
+                output.value = outputText;
+                break;
+            case "JsonSchema_C":
+                const JsonSchema = {};
+                const property = {};
+                const arr = new Array(0);
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        property[cols[2].trim()] = jsonSchemaTypeFormat(cols[3].trim(), cols[4].trim());
+                        requiredArray(cols[5].trim(), arr, cols[2].trim());
+                    }
+                });
+                JsonSchema["required"] = arr;
+                JsonSchema["properties"] = property;
+                output.value = jsonPrettyFormat(JsonSchema);
+                break;
+            case "Iceberg_C":
+                var idField = "";
+                var createIcebergTableFields = "";
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        const field = cols[2].trim();
+                        const comment = cols[1].trim();
+                        if (idField === "") idField = field;
+                        console.log(icebergTypeFormat(cols[3].trim()));
+                        createIcebergTableFields += "\t" + field.toLowerCase() + " " + icebergTypeFormat(cols[3].trim()).toLowerCase() + " comment '" + comment + "'" + ",\n";
+                    }
+                });
+                createIcebergTableFields = createIcebergTableFields
+                    + "\t" + "vpccreatetime string comment '处理时间',\n"
+                    + "\t" + "vpcupdatetime string comment '更新时间',\n"
+                    + "\t" + "vpcexpiretime string comment '过期时间',\n"
+                    + "\t" + "vpcisdelete boolean comment '是否删除',\n"
+                    + "\t" + "ods_dt string comment '入库日期')\n";
+                var outputText =
+                    "CREATE TABLE IcebergTable" +
+                    "(\n" +
+                    createIcebergTableFields +
+                    "using iceberg\n" +
+                    "partitioned by (ods_dt)";
+                output.value = outputText;
+                break;
+            case "Fields_mapping":
+                var fields = "";
+                var fieldsMaping = "";
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        const field = cols[2].trim();
+                        if (fields === "") fields = field;
+                        fieldsMaping += field + ":" + fieldsTypeFormat(cols[3].trim()) + "\n";
+                    }
+                });
+                var outputText = fieldsMaping + "VPCCreateTime:varchar";
+                output.value = outputText;
+                break;
+            case "TestData":
+                var createTestData = "";
+                // console.log(type);
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        const field = cols[2].trim();
+                        const type = cols[3].trim();
+                        createTestData += "\"" + field + "\"" + ": " + getTestData(field, type) + "," + "\n";
+
+                    }
+                });
+                output.value = createTestData;
+                break;
+            case "BeanFields":
+                var outputText = "";
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        outputText += "@JSONField(name=\"" + cols[2].trim() + "\")\n";
+                        outputText += "@ApiModelProperty(name=\"" + cols[2].trim() + "\",value = \"" + cols[1].trim() + "\")\n";
+                        outputText += "private " + beanTypeFormat(cols[3].trim()) + " " + cols[2].trim() + ";\n"
+                    }
+                });
+                outputText += "@JSONField(name=\"VPCCreateTime\")\n" +
+                    "private String VPCCreateTime;\n" +
+                    "@JSONField(name=\"VPCUpdateTime\")\n" +
+                    "private String VPCUpdateTime;\n" +
+                    "@JSONField(name=\"VPCExpireTime\")\n" +
+                    "private String VPCExpireTime;\n" +
+                    "@JSONField(name=\"VPCIsDelete\")\n" +
+                    "private Boolean VPCIsDelete;\n";
+                output.value = outputText;
+                break;
+            case "EsToJavaBean":
+                var outputText = "";
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        var a = '@ElasticSearchField(type = ElasticSearchFieldType.Keyword)\n';
+                        var b = "private " + beanTypeFormat(cols[3].trim()) + " " + cols[2].trim() + ";\n"
+                        outputText += (a + b)
+                    }
+                });
+                outputText += "@ElasticSearchField(type = ElasticSearchFieldType.Keyword)\nprivate String VPCCreateTime;\n";
+                outputText += "@ElasticSearchField(type = ElasticSearchFieldType.Keyword)\nprivate String VPCUpdateTime;\n";
+                outputText += "@ElasticSearchField(type = ElasticSearchFieldType.Keyword)\nprivate String VPCExpireTime;\n";
+                outputText += "@ElasticSearchField(type = ElasticSearchFieldType.Keyword)\nprivate Boolean VPCIsDelete;\n";
+                output.value = outputText;
+                break;
+            case "JsonData":
+                const data = {};
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        data[cols[2].trim()] = genValueFromType(cols[3].trim());
+                    }
+                });
+                output.value = jsonPrettyFormat(data);
+                break;
+            case "EnumGenerate":
+                var result = "";
+                inputText.split("\n").forEach(function (line) {
+                    if (isNotBlank(line)) {
+                        const cols = line.split("\t");
+                        result+="T"+cols[0].trim()+"("+"\""+cols[1].trim()+"\""+","+"\""+cols[2].trim()+"\""+"),\n";
+                    }
+                });
+                var field1 = "@Getter\n@Setter\nprivate String code;\n"
+                var field2 = "@Getter\n@Setter\nprivate String desc;\n"
+                output.value = result+"\n"+field1+"\n"+field2;
+                break;
+        }
+    }
+
+    function isNotBlank(stringData) {
+        return stringData != "" && stringData != null && stringData != undefined
+    }
+
+    /*FlinkSQL字段类型格式化*/
+    function sqlTypeFormat(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        if (up === "DATETIME") {
+            return "STRING"
+        }
+        //2021-11-26 经过与老视图库和调用方沟通，bool类型按int存储
+        if (up === "BOOLEAN") {
+            return "INT"
+        }
+        if (up === "INT") {
+            return "INT"
+        }
+        if (up === "DOUBLE") {
+            return "DOUBLE"
+        }
+        if (up === "LONG") {
+            return "BIGINT"
+        }
+        if (up === "BASE64BINARY") {
+            return "STRING"
+        }
+        if (up === "STRING") {
+            return "STRING"
+        }
+        if (up.endsWith("IDTYPE")) {
+            return "STRING"
+        }
+        if (up === ("SUBIMAGEINFOLIST")) {
+            return "ROW(SubImageInfoObject ARRAY<ROW(ImageID STRING,EventSort INT,DeviceID STRING,StoragePath STRING,Type STRING,FileFormat STRING,ShotTime STRING,Width INT,Height INT,DeviceType STRING,DeviceSNNo STRING,ImeiSn STRING,APSId STRING,SelfDefData STRING,LocalPath STRING,MountPath STRING,FeatureList ROW(FeatureInfoObject ARRAY<MAP<STRING,STRING>>),AlgorithmsStatus INT,FeatureInfoObject MAP<STRING,STRING>,PicName STRING,Score DOUBLE,FileHash STRING)>)"
+        }
+        if (up === ("KEDASUBIMAGEINFOOBJECT")) {
+            return "ROW(KedaSubImageInfoObject ARRAY<ROW(ImageID STRING,EventSort INT,DeviceID STRING,StoragePath STRING,Type STRING,FileFormat STRING,ShotTime STRING,Width INT,Height INT,DeviceType STRING,DeviceSNNo STRING,FeatureList ROW(FeatureInfoObject ARRAY<MAP<STRING,STRING>>),ImeiSn STRING,APSId STRING,SelfDefData STRING,Feature ARRAY<MAP<STRING,STRING>>,LocalPath STRING,MountPath STRING,FileHash STRING)>)"
+        }
+        if (up === ("FEATUREINFOLIST")) {
+            return "ROW(FeatureInfoObject ARRAY<MAP<STRING,STRING>>)"
+        }
+        return "█████" + type + "█████"
+    }
+
+    function genValueFromType(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        if (up === "DATETIME") {
+            return "20220101090000"
+        }
+        if (up === "BOOLEAN") {
+            return 1;
+        }
+        if (up === "INT") {
+            return 1;
+        }
+        if (up === "DOUBLE") {
+            return 2.2;
+        }
+        if (up === "LONG") {
+            return 1234567890123456;
+        }
+        if (up === "BASE64BINARY") {
+            return "base64"
+        }
+        if (up === "STRING") {
+            return "s"
+        }
+        if (up.endsWith("IDTYPE")) {
+            return "1234567890"
+        }
+        return "█████" + type + "█████"
+    }
+
+    /*ES Mapping字段类型格式化*/
+    function mappingTypeFormat(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        if (up === "DATETIME") {
+            return {"type": "date", "format": "yyyyMMddHHmmss"}
+        }
+        //2021-11-26 经过与老视图库和调用方沟通，bool类型按int存储
+        if (up === "BOOLEAN") {
+            return {"type": "integer"}
+        }
+        if (up === "INT") {
+            return {"type": "integer"}
+        }
+        if (up === "LONG") {
+            return {"type": "long"}
+        }
+        if (up === "STRING") {
+            return {"type": "keyword"}
+        }
+        if (up === "DOUBLE") {
+            return {"type": "double"}
+        }
+        if (up === "LONG") {
+            return {"type": "long"}
+        }
+        if (up === "BASE64BINARY") {
+            return {"type": "keyword"}
+        }
+        if (up.endsWith("IDTYPE")) {
+            return {"type": "keyword"}
+        }
+        if (up.startsWith("VARCHAR")) {
+            return {"type": "keyword"}
+        }
+        if (up === ("SUBIMAGEINFOLIST")) {
+            return {
+                "dynamic": false,
+                "type": "nested",
+                "properties": {
+                    "SubImageInfoObject": {
+                        "properties": {
+                            "ImageID": {"type": "keyword"},
+                            "EventSort": {"type": "integer"},
+                            "DeviceID": {"type": "keyword"},
+                            "StoragePath": {"type": "keyword"},
+                            "Type": {"type": "keyword"},
+                            "FileFormat": {"type": "keyword"},
+                            "ShotTime": {"type": "date", "format": "yyyyMMddHHmmss"},
+                            "Width": {"type": "integer"},
+                            "Height": {"type": "integer"},
+                            "DeviceType": {"type": "keyword"},
+                            "DeviceSNNo": {"type": "keyword"},
+                            "ImeiSn": {"type": "keyword"},
+                            "APSId": {"type": "keyword"},
+                            "SelfDefData": {"type": "keyword"},
+                            "LocalPath": {"type": "keyword"},
+                            "MountPath": {"type": "keyword"},
+                            "FeatureList": {"type": "object"},
+                            "AlgorithmsStatus": {"type": "integer"},
+                            "FeatureInfoObject": {"type": "object"},
+                            "PicName": {"type": "keyword"},
+                            "Score": {"type": "double"},
+                            "FileHash": {"type": "keyword"}
+                        }
+                    }
+                }
+            }
+        }
+        if (up === ("KEDASUBIMAGEINFOOBJECT")) {
+            return {
+                "dynamic": false,
+                "type": "nested",
+                "properties": {
+                    "KedaSubImageInfoObject": {
+                        "properties": {
+                            "ImageID": {"type": "keyword"},
+                            "EventSort": {"type": "integer"},
+                            "DeviceID": {"type": "keyword"},
+                            "StoragePath": {"type": "keyword"},
+                            "Type": {"type": "keyword"},
+                            "FileFormat": {"type": "keyword"},
+                            "ShotTime": {"type": "date", "format": "yyyyMMddHHmmss"},
+                            "Width": {"type": "integer"},
+                            "Height": {"type": "integer"},
+                            "DeviceType": {"type": "keyword"},
+                            "DeviceSNNo": {"type": "keyword"},
+                            "FeatureList": {"type": "object"},
+                            "ImeiSn": {"type": "keyword"},
+                            "APSId": {"type": "keyword"},
+                            "SelfDefData": {"type": "keyword"},
+                            "Feature": {"type": "object"},
+                            "LocalPath": {"type": "keyword"},
+                            "MountPath": {"type": "keyword"},
+                            "FileHash": {"type": "keyword"}
+                        }
+                    }
+                }
+            }
+        }
+        if (up === ("FEATUREINFOLIST")) {
+            return {"dynamic": false, "type": "object"}
+        }
+        return {"type": "█████" + type + "█████"};
+    }
+
+    function getTestData(field, type) {
+        var formatType = icebergTypeFormat(type);
+        if (field.indexOf("Time") !== -1) {
+            formatType = "TIME";
+        }
+        switch (formatType) {
+            case "BOOLEAN":
+                return 1;
+            case "LONG":
+                return "11111111111";
+            case "INT":
+                return "\"" + 1 + "\"";
+            case "STRING":
+                return 1;
+            case "TIME":
+                return "\"" + generateTimeReqestNumber() + "\"";
+            default:
+                return "█████check█████";
+        }
+    }
+
+    function pad2(n) {
+        return n < 10 ? '0' + n : n
+    }
+
+    function generateTimeReqestNumber() {
+        var date = new Date();
+        return date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+    }
+
+    function beanTypeFormat(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        if (up === "DATETIME") {
+            return "String"
+        }
+        if (up === "BOOLEAN") {
+            return "Integer"
+        }
+        if (up === "INT") {
+            return "Integer"
+        }
+        if (up === "LONG") {
+            return "Long"
+        }
+        if (up === "STRING") {
+            return "String"
+        }
+        if (up === "DOUBLE") {
+            return "Double"
+        }
+        if (up === "LONG") {
+            return "Long"
+        }
+        if (up === "BASE64BINARY") {
+            return "String"
+        }
+        if (up.endsWith("IDTYPE")) {
+            return "String"
+        }
+        if (up.startsWith("VARCHAR")) {
+            return "String"
+        }
+        return "█████check█████";
+    }
+
+    function jsonSchemaTypeFormat(type, len) {
+        var up;
+        var maxLength = parseInt(len);
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        console.log(up);
+        if (up === "DATETIME") {
+            return {
+                "pattern": "^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|(02(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))0229))([0-1]?[0-9]|2[0-3])([0-5][0-9])([0-5][0-9])$",
+                "oneOf":[{"type":"string"},{"type":"null"}],
+                "minLength": 14,
+                "description": "yyyyMMddHHmmss"
+            }
+        }
+        if (up === "BOOLEAN") {
+            return {
+                "oneOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^[0,1]{0,1}$|^$"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            }
+        }
+        if (up === "INT" || up === "LONG" || up === "DOUBLE") {
+            return {
+                "oneOf": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^[+-]?[\\d]+([\\.][\\d]+)?([Ee][+-]?[\\d]+)?$|^$"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            }
+        }
+        if (up === "STRING" || up === "BASE64BINARY" || up.endsWith("IDTYPE") || up.startsWith("VARCHAR")) {
+            if (isNotBlank(len)) {
+                return {"oneOf":[{"type":"string"},{"type":"null"}], "maxLength": maxLength}
+            } else {
+                // return {"type": ["string", "null"]}
+                return "█████";
+            }
+
+        }
+        if (up.split("（")[0] === "ARRAY") {
+            var type2 = up.split("（")[1].split("）")[0];
+            return {"oneOf":[{"type":"string"},{"type":"null"}], "items": jsonSchemaTypeFormat(type2, "")}
+        }
+        return {"type": "█████check█████"};
+    }
+
+    function icebergTypeFormat(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+        console.log("var=============" + up);
+        if (up === "BOOLEAN") {
+            return "INT"
+        }
+        if (up === "LONG") {
+            return "LONG"
+        }
+        if (up === "INT") {
+            return "INT"
+        }
+        if (up === "DOUBLE") {
+            return "DOUBLE"
+        }
+        if (up === "STRING" || up === "DATETIME" || up === "BASE64BINARY" || up.endsWith("IDTYPE") || up.startsWith("VARCHAR") || up.endsWith("OBJECT") || up.endsWith("LIST")) {
+            return "STRING"
+        }
+        if (up.split("（")[0] === "ARRAY") {
+            var type2 = up.split("（")[1].split("）")[0];
+            return "LIST<" + icebergTypeFormat(type2) + ">"
+        }
+        return "█████check█████"
+    }
+
+    function fieldsTypeFormat(type) {
+        var up;
+        if (isNotBlank(extendDataType[type])) {
+            up = extendDataType[type].toUpperCase();
+        } else {
+            up = type.toUpperCase();
+        }
+
+        if (up === "BOOLEAN") {
+            return "integer"
+        }
+        if (up === "LONG") {
+            return "long"
+        }
+        if (up === "INT") {
+            return "integer"
+        }
+        if (up === "DOUBLE") {
+            return "double"
+        }
+        if (up === "STRING" || up === "DATETIME" || up === "BASE64BINARY" || up.endsWith("IDTYPE") || up.startsWith("VARCHAR") || up.endsWith("OBJECT") || up.endsWith("LIST")) {
+            return "varchar"
+        }
+        if (up.split("（")[0] === "ARRAY") {
+            var type2 = up.split("（")[1].split("）")[0];
+            return "ARRAY<" + icebergTypeFormat(type2) + ">"
+        }
+        return "█████check█████"
+    }
+
+    function requiredArray(type, arr, keyWord) {
+        if (type == "R") {
+            arr.push(keyWord);
+        }
+        return arr;
+
+    }
+
+    /**格式化json*/
+    function jsonPrettyFormat(data) {
+        try {
+            if (typeof (data) == 'string') {
+                return JSON.stringify(JSON.parse(data), undefined, 4);
+            } else {
+                return JSON.stringify(data, undefined, 4);
+            }
+        } catch (err) {
+            alert("消息格式错误: " + err);
+        }
+
+    }
+
+    /**
+     *格式化显示日期时间
+     *参数x : 待显示的日期时间，示例： new Date()
+     *参数y: 需要显示的格式，示例：yyyy-MM-dd hh:mm:ss
+     */
+    function date2str(date, formatString) {
+        var z = {
+            y: date.getFullYear(),
+            M: date.getMonth() + 1,
+            d: date.getDate(),
+            h: date.getHours(),
+            m: date.getMinutes(),
+            s: date.getSeconds()
+        };
+        return formatString.replace(/(y+|M+|d+|h+|m+|s+)/g, function (v) {
+            return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-(v.length > 2 ? v.length : 2))
+        });
+    }
+</script>
+</html>
