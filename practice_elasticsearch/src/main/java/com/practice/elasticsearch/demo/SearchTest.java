@@ -1,5 +1,6 @@
 package com.practice.elasticsearch.demo;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -15,6 +16,7 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.metrics.stats.StatsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.Test;
 
@@ -31,29 +33,21 @@ public class SearchTest {
     public void test_01() throws IOException {
         RestHighLevelClient client = RestHighLevelClientUtil.getRestHighLevelClient();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.mustNot(QueryBuilders.termQuery("UploadTime", 0));
-        boolQueryBuilder.mustNot(QueryBuilders.termQuery("VerificationTime", 0));
-        boolQueryBuilder.must(QueryBuilders.existsQuery("UploadTime"));
-        boolQueryBuilder.must(QueryBuilders.existsQuery("VerificationTime"));
-        String script = StrUtil.format("doc['{}'].value - doc['{}'].value", "UploadTime", "VerificationTime");
-        StatsAggregationBuilder stats = AggregationBuilders.stats("statics").script(new Script(script));
-        String equalScript = StrUtil.format("doc['{}'].value - doc['{}'].value == 0", "UploadTime", "VerificationTime");
-        boolQueryBuilder.mustNot(QueryBuilders.scriptQuery(new Script(equalScript)));
         boolQueryBuilder.must(QueryBuilders.rangeQuery("VPCCreateTime")
-                .gt("20220512090000").lt("20220512095959"));
-//                    System.out.println(req.getSpiltVIIDStartTime(finalK, finalI));
-//                    System.out.println(req.getSpiltVIIDEndTime(finalK, finalI));
+                .gte("20220522120000").lt("20220522130000"));
+        boolQueryBuilder.must(QueryBuilders.termQuery("KafkaTopic","gvp.ods.MotorVehicles"));
         SearchSourceBuilder ssb = new SearchSourceBuilder();
-        ConstantScoreQueryBuilder constantScoreQuery = QueryBuilders.constantScoreQuery(boolQueryBuilder);
-        ssb.query(constantScoreQuery).aggregation(stats).size(0);
+
+        ssb.query(boolQueryBuilder).aggregation(AggregationBuilders.sum("sum").field("RecordCnt")).size(0);
 
 
-        SearchRequest request = new SearchRequest("index_viidplus_tracelog_nodes_*");
+        SearchRequest request = new SearchRequest("index_viidplus_tracelog_nodes_20220522");
         request.source(ssb);
         SearchResponse response = null;
         try {
-            long time1 = System.currentTimeMillis();
             response = client.search(request, RequestOptions.DEFAULT);
+            ParsedSum sum = response.getAggregations().get("sum");
+            System.out.println(Convert.toLong(sum.getValue()));
         } catch (IOException e) {
             e.printStackTrace();
         }

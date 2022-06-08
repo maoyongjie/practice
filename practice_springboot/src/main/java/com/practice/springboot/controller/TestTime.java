@@ -26,10 +26,9 @@ public class TestTime {
 //        String now = DateUtil.format(DateUtil.date(), DatePattern.PURE_DATETIME_PATTERN);
 //        System.out.println(now);
 
-        System.out.println(DateUtil.parse("20220510130000", DatePattern.PURE_DATETIME_PATTERN).getTime());
+        System.out.println(DateUtil.parse("20220522130000", DatePattern.PURE_DATETIME_PATTERN).getTime());
 
-        System.out.println(DateUtil.offset(DateUtil.date(), DateField.DAY_OF_MONTH, 1));
-        System.out.println(DateUtil.parse("20220510140000", DatePattern.PURE_DATETIME_PATTERN).getTime());
+        System.out.println(DateUtil.parse("20220522135959", DatePattern.PURE_DATETIME_PATTERN).getTime());
 
 
 //        DateTime time = DateUtil.offsetMonth(DateUtil.parse(date, DatePattern.PURE_DATETIME_PATTERN), 1);
@@ -44,6 +43,9 @@ public class TestTime {
         Map<String,Object> map = new HashMap<>();
         map.put("ss",null);
         System.out.println(ObjectUtil.isNull(map.get("ss")));
+        int a =89296256+68148158+65163899+63071333+54785358+17603241+14498587+43027030+69416582+69658306+69497053+69067104
+                +62489054+61803982+61058225+63879068+63117630+65596684+59645093+20797975+15996693+39092718+69587026+69782189;
+        System.out.println(a);
 
     }
 }
