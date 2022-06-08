@@ -17,7 +17,7 @@ public class User {
 
     private int age;
 
-    public User() {
+    private User() {
     }
 
     public User(String userName, long userId, int age) {
