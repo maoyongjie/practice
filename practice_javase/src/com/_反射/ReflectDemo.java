@@ -1,12 +1,9 @@
 package com._反射;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.lang.reflect.*;
+import java.util.Arrays;
 
 /**
  * @author MaoYongjie
@@ -14,13 +11,13 @@ import java.util.*;
  * @Description: https://blog.csdn.net/qq_44715943/article/details/120587716
  */
 public class ReflectDemo {
-    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchFieldException {
+    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchFieldException, NoSuchMethodException {
         //一、获取Class的三种方式 即字节码
 
         //1.Class.forName(“完整类名带包名”)
         //如果你只是希望一个类的静态代码块执行，其它代码一律不执行，可以使用Class.forName
         Class<?> aClass = Class.forName("com._反射.User");
-        User user = new User();
+        User user = new User("myj",123L,26);
         //2.对象.getClass()
         Class<? extends User> bClass = user.getClass();
         //3.任何类型.class
@@ -58,15 +55,51 @@ public class ReflectDemo {
         System.out.println(userName);
         System.out.println(Modifier.toString(aClass.getModifiers()));
         System.out.println(Arrays.toString(aClass.getDeclaredMethods()));
+
     }
 
     @Test
-    public void test_011(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("1",null);
-        map.put("2",null);
-        map.put("3",1);
-        map.put("4",2);
-        System.out.println(JSON.toJSONString(map));
+    public void test_01() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<?> aClass = Class.forName("com._反射.User");
+        Constructor<?> declaredConstructor = aClass.getDeclaredConstructor(String.class, long.class, int.class);
+        Constructor<?> nonParam = aClass.getDeclaredConstructor();
+        System.out.println(declaredConstructor.getParameterCount());
+        //调用无参数构造器实例化一个类
+        //暴力打开私有权限构造器
+        nonParam.setAccessible(true);
+        User user = (User) nonParam.newInstance();
+        //java.lang.IllegalAccessException: Class com._反射.ReflectDemo
+        //can not access a member of class com._反射.User with modifiers "private"
+        //使用暴力反射 void setAccessible(true)
+        // 修改访问权限 true代表暴力攻破权限，false表示保留不可访问权限
     }
+
+    @Test
+    public void Reflect_Field() throws Exception {
+        Class<?> aClass = Class.forName("com._反射.User");
+        User user = new User("myj",123L,26);
+        Field userName = aClass.getDeclaredField("userName");
+        userName.set(user,"冷酷无情");
+        System.out.println(user.getUserName());
+        Field age = aClass.getDeclaredField("age");
+        age.setAccessible(true);
+        int i = (int) age.get(user);
+        System.out.println(i);
+    }
+
+    @Test
+    public void Reflect_Method() throws Exception{
+        Class<?> aClass = Class.forName("com._反射.User");
+        User user = new User("myj",123L,26);
+        Method declaredMethod = aClass.getDeclaredMethod("printName");
+        declaredMethod.setAccessible(true);
+        declaredMethod.invoke(user);
+    }
+
+    @Test
+    public void Mybatis_Reflection() throws Exception{
+        User user = new User("myj",123L,26);
+        Mybatis.save(user);
+    }
+
 }
