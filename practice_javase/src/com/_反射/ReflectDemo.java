@@ -1,8 +1,12 @@
 package com._反射;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.junit.Test;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author MaoYongjie
@@ -54,5 +58,15 @@ public class ReflectDemo {
         System.out.println(userName);
         System.out.println(Modifier.toString(aClass.getModifiers()));
         System.out.println(Arrays.toString(aClass.getDeclaredMethods()));
+    }
+
+    @Test
+    public void test_011(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("1",null);
+        map.put("2",null);
+        map.put("3",1);
+        map.put("4",2);
+        System.out.println(JSON.toJSONString(map));
     }
 }
