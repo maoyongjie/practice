@@ -15,7 +15,7 @@ public class HttpServer {
 
     // 存放静态资源的位置
     public static final String WEB_ROOT =
-            System.getProperty("user.dir") + File.separator  + "webroot";
+            System.getProperty("user.dir") + File.separator +"practice_javaweb"+ File.separator+"webroot";
 
     // 关闭Server的请求
     private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
@@ -34,9 +34,8 @@ public class HttpServer {
         ServerSocket serverSocket = null;
         int port = 8080;
         try {
-            serverSocket =  new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
-        }
-        catch (IOException e) {
+            serverSocket = new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -66,8 +65,7 @@ public class HttpServer {
 
                 // 如果接受的是关闭请求，则设置关闭监听request的标志
                 shutdown = request.getUri().equals(SHUTDOWN_COMMAND);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 continue;
             }

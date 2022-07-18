@@ -2,8 +2,11 @@ package com.practice.elasticsearch.demo;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import com.practice.elasticsearch.connect.RestHighLevelClientUtil;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -63,4 +66,17 @@ public class SearchTest {
         System.out.println(split.length);
     }
 
+    @Test
+    public void test_03(){
+        String url = "http://viid-plus-dev.devdolphin.com/ga-viid-moc-server/pointDevice/exportHugeList?type=ipc";
+        HttpResponse httpResponse = HttpRequest.post(url).
+                timeout(5000000).keepAlive(true).body("[]","application/json")
+                .execute();
+        System.out.println(httpResponse.body());
+    }
+
+    @Test
+    public void test_04(){
+        throw new IllegalArgumentException("KFC Crazy Thursday need $50.");
+    }
 }
