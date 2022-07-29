@@ -34,26 +34,7 @@ public class SearchTest {
 
     @Test
     public void test_01() throws IOException {
-        RestHighLevelClient client = RestHighLevelClientUtil.getRestHighLevelClient();
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must(QueryBuilders.rangeQuery("VPCCreateTime")
-                .gte("20220522120000").lt("20220522130000"));
-        boolQueryBuilder.must(QueryBuilders.termQuery("KafkaTopic","gvp.ods.MotorVehicles"));
-        SearchSourceBuilder ssb = new SearchSourceBuilder();
 
-        ssb.query(boolQueryBuilder).aggregation(AggregationBuilders.sum("sum").field("RecordCnt")).size(0);
-
-
-        SearchRequest request = new SearchRequest("index_viidplus_tracelog_nodes_20220522");
-        request.source(ssb);
-        SearchResponse response = null;
-        try {
-            response = client.search(request, RequestOptions.DEFAULT);
-            ParsedSum sum = response.getAggregations().get("sum");
-            System.out.println(Convert.toLong(sum.getValue()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
