@@ -24,6 +24,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * @author MaoYongjie
@@ -59,5 +60,11 @@ public class SearchTest {
     @Test
     public void test_04(){
         throw new IllegalArgumentException("KFC Crazy Thursday need $50.");
+    }
+
+    @Test
+    public void test_05(){
+        BigDecimal value = new BigDecimal("31.295462");
+        System.out.println(value.longValueExact());
     }
 }
