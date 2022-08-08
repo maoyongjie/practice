@@ -95,8 +95,30 @@ class Node {
 // 使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
 public class Solution116 {
     public Node connect(Node root) {
-        inorder(root);
+//        inorder(root);
+        if (root == null) {
+            return null;
+        }
+        root.next = null;
+        solution2(root);
         return root;
+
+    }
+
+    private void solution2(Node root) {
+        if (root.left == null || root.right == null) {
+            return;
+        }
+
+        root.left.next = root.right;
+        if (root.next == null) {
+            root.right.next = null;
+        } else {
+            root.right.next = root.next.left;
+        }
+        solution2(root.left);
+        solution2(root.right);
+
     }
 
     public void inorder(Node root) {
@@ -113,7 +135,7 @@ public class Solution116 {
                 if (pre != null) {
                     pre.next = node;
                 }
-                if(i==size-1){
+                if (i == size - 1) {
                     node.next = null;
                 }
                 if (node.left != null)
