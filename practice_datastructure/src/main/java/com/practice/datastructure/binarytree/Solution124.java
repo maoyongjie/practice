@@ -51,6 +51,7 @@ package com.practice.datastructure.binarytree;
 public class Solution124 {
     public static void main(String[] args) {
         System.out.println(Integer.MIN_VALUE);
+        Solution124 solution124 = new Solution124();
     }
 
     public static int max = Integer.MIN_VALUE;
@@ -70,6 +71,6 @@ public class Solution124 {
         max = Math.max(max, left);
         max = Math.max(max, right);
         max = Math.max(max, (left + right + root.val));
-        return Math.max(Math.max(left + root.val, root.val), Math.max(right + root.val, root.val));
+        return Math.max(left,right)+root.val;
     }
 }
