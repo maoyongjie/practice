@@ -1,10 +1,6 @@
 package com._集合;
 
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import org.apache.flink.shaded.guava18.com.google.common.collect.ImmutableList;
-import org.apache.flink.shaded.guava18.com.google.common.collect.Lists;
-import org.junit.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
