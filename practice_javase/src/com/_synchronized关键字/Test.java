@@ -1,5 +1,7 @@
 package com._synchronized关键字;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author MaoYongjie
  * @date 2022/8/10 16:58
@@ -22,6 +24,7 @@ public class Test {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        ReentrantLock lock = new ReentrantLock();
 //        new Thread(() -> {
 //            try {
 //                t1.method2();
