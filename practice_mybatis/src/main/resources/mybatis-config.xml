@@ -16,6 +16,8 @@
     </environments>
     <mappers>
         <!--加载sql映射文件-->
-        <mapper resource="com/practice/mybatis/mapper/UserMapper.xml"/>
+        <!--<mapper resource="com/practice/mybatis/mapper/UserMapper.xml"/>-->
+        <package name="com.practice.mybatis.mapper"/>
     </mappers>
+
 </configuration>
