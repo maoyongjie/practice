@@ -1,19 +1,22 @@
 package com._线程池;
 
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
-public class ThreadPoolDemo01 {
+public class ThreadPoolDemo01 extends AbstractQueuedSynchronizer {
     public static void main(String[] args) {
         ExecutorService pool = Executors.newFixedThreadPool(3);
+        Executor executor = new ThreadPoolExecutor(5,10,50L,TimeUnit.MICROSECONDS,new ArrayBlockingQueue<>(5));
+
         Runnable target = new MyRunnable();
+        executor.execute(target);
 //        pool.submit(target); //创建新线程
 //        pool.submit(target); //创建新线程
 //        pool.submit(target); //创建新线程
 //        pool.submit(target); //复用之前的线程
+
+        ThreadPoolDemo01 threadPoolDemo01 = new ThreadPoolDemo01();
 
         Future<String> v1 = pool.submit(new MyCallable(100));
         Future<String> v2 = pool.submit(new MyCallable(200));
