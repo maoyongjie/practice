@@ -17,7 +17,7 @@ public class ReflectDemo {
         //1.Class.forName(“完整类名带包名”)
         //如果你只是希望一个类的静态代码块执行，其它代码一律不执行，可以使用Class.forName
         Class<?> aClass = Class.forName("com._反射.User");
-        User user = new User("myj",123L,26);
+        User user = new User("myj", 123L, 26);
         //2.对象.getClass()
         Class<? extends User> bClass = user.getClass();
         //3.任何类型.class
@@ -77,9 +77,9 @@ public class ReflectDemo {
     @Test
     public void Reflect_Field() throws Exception {
         Class<?> aClass = Class.forName("com._反射.User");
-        User user = new User("myj",123L,26);
+        User user = new User("myj", 123L, 26);
         Field userName = aClass.getDeclaredField("userName");
-        userName.set(user,"冷酷无情");
+        userName.set(user, "冷酷无情");
         System.out.println(user.getUserName());
         Field age = aClass.getDeclaredField("age");
         age.setAccessible(true);
@@ -88,17 +88,17 @@ public class ReflectDemo {
     }
 
     @Test
-    public void Reflect_Method() throws Exception{
+    public void Reflect_Method() throws Exception {
         Class<?> aClass = Class.forName("com._反射.User");
-        User user = new User("myj",123L,26);
+        User user = new User("myj", 123L, 26);
         Method declaredMethod = aClass.getDeclaredMethod("printName");
         declaredMethod.setAccessible(true);
         declaredMethod.invoke(user);
     }
 
     @Test
-    public void Mybatis_Reflection() throws Exception{
-        User user = new User("myj",123L,26);
+    public void Mybatis_Reflection() throws Exception {
+        User user = new User("myj", 123L, 26);
         Mybatis.save(user);
     }
 
