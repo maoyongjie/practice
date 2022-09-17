@@ -11,6 +11,11 @@ public class Test {
     public static void main(String[] args) {
         TestSynchronized t1 = new TestSynchronized();
         TestSynchronized t2 = new TestSynchronized();
+        try {
+            t1.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         new Thread(() -> {
             try {
                 t1.method1();
