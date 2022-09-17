@@ -57,15 +57,16 @@ public class Solution10 {
         char[] charS = s.toCharArray();
         char[] charP = p.toCharArray();
         int p1 = 0, p2 = 0;
-        while (p1<s.length()){
-            if(charP[p2+1]!='*'){
+        //定义P(i,j)为i结尾，j结尾的字符串是否可以匹配
+        while (p1 < s.length()) {
+            if (charP[p2 + 1] != '*') {
                 if (charS[p1] == charP[p2] || charP[p2] == '.') {
                     p1++;
                     p2++;
-                }else {
+                } else {
                     return false;
                 }
-            }else {
+            } else {
 
             }
         }
