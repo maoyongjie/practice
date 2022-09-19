@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @date 2022/3/9 9:13
  * @Description:
  */
-//@SpringBootApplication
+@SpringBootApplication
 public class Application implements CommandLineRunner {
 
     public static void main(String[] args) {
