@@ -12,4 +12,38 @@
     select * from t_user;
   </select>
 
+    <insert id="createOne">
+        insert into book.t_user (username, password, email)
+        values (#{userName},#{passWord},#{email})
+    </insert>
+
+    <!--item：表示集合中每一个元素进行迭代时的别名-->
+    <!--index：指定一个名字，用于表示在迭代过程中，每次迭代到的位置-->
+    <!--open：表示该语句以什么开始-->
+    <!--separator：表示在每次进行迭代之间以什么符号作为分隔符-->
+    <!--close：表示以什么结束-->
+    <insert id="createMany" parameterType="java.util.ArrayList">
+        insert into book.t_user (username, password, email) values
+        <foreach collection="list" index="index" separator="," item="item">
+            (#{item.userName},#{item.passWord},#{item.email})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOne" parameterType="java.lang.Integer">
+        delete from t_user where id = #{id};
+    </delete>
+
+    <delete id="deleteMany" parameterType="java.util.ArrayList">
+        delete from t_user where
+        <foreach collection="list" item="id" separator="or">
+            id = #{id}
+        </foreach>
+
+    </delete>
+
+    <update id="updateOne" parameterType="com.practice.mybatis.UserUpdateVO">
+        update t_user
+        set email = #{email} , userName = #{userName}
+        where id = #{id}
+    </update>
 </mapper>

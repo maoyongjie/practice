@@ -1,46 +1,26 @@
 package com.practice.mybatis;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class User {
     private Integer id;
     private String userName;
-    private String password;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    private String passWord;
     private String email;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getuserName() {
-        return userName;
-    }
-
-    public void setuserName(String userName) {
+    public User(String userName, String passWord, String email) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+        this.passWord = passWord;
+        this.email = email;
     }
 
     @Override
     public String toString() {
-        return "id:"+id+"\nuserName:"+userName+"\npassword:"+password+"\nemail:"+email;
+        return "id:"+id+"\nuserName:"+userName+"\npassword:"+passWord+"\nemail:"+email;
     }
 }
