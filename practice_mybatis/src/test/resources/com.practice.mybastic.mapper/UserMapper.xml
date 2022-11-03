@@ -49,13 +49,4 @@
     <select id="selectLimit" parameterType="map" resultType="com.practice.mybatis.User">
         select * from t_user limit #{startIndex},#{pageSize}
     </select>
-
-    <select id="rowBounds" resultType="com.practice.mybatis.User">
-        select * from t_user
-    </select>
-
-    <select id="selectUsers"  resultType="com.practice.mybatis.User">
-        select * from t_user
-    </select>
-
 </mapper>

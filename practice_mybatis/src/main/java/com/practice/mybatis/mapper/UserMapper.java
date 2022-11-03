@@ -5,6 +5,7 @@ import com.practice.mybatis.UserUpdateVO;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
     List<User> selectAll();
@@ -19,5 +20,12 @@ public interface UserMapper {
 
     int updateOne(UserUpdateVO vo);
 
-    int updateMany(List<UserUpdateVO> vo);
+    //分页查询
+    List<User> selectLimit(Map<String,Object> map);
+
+    //RowBounds分页
+    List<User> rowBounds();
+
+    //PageHelper分页
+    List<User> selectUsers();
 }

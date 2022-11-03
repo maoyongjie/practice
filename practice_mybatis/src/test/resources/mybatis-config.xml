@@ -3,16 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
-    <plugins>
-        <!-- com.github.pagehelper为PageHelper类所在包名 -->
-        <plugin interceptor="com.github.pagehelper.PageInterceptor">
-            <!-- 使用MySQL方言的分页 -->
-            <property name="helperDialect" value="mysql"/>
-            <property name="pageSizeZero" value="true"/>
-        </plugin>
-    </plugins>
-
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
@@ -24,7 +14,6 @@
             </dataSource>
         </environment>
     </environments>
-
     <mappers>
         <!--加载sql映射文件-->
         <!--<mapper resource="com/practice/mybatis/mapper/UserMapper.xml"/>-->
@@ -32,5 +21,3 @@
     </mappers>
 
 </configuration>
-
-
